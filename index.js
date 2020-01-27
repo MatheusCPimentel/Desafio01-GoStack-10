@@ -2,8 +2,25 @@ const express = require('express');
 
 const server = express();
 
-server.get('/users', (req, res) => {
-  return res.send('Hello!');
+server.use(express.json());
+
+const projects = [];
+
+// GET:
+
+server.get('/projects', (req, res) => {
+  return res.json(projects);
+})
+
+// POST:
+
+server.post('/projects', (req, res) => {
+  const { title, tasks } = req.body;
+
+  projects.push(title, tasks);
+
+  return res.json(projects);
+
 })
 
 server.listen(3000);
