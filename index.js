@@ -6,6 +6,25 @@ server.use(express.json());
 
 const projects = [];
 
+// MIDDLEWARES:
+
+function checkProjectExists(req, res, next) {
+  const { id } = req.params;
+  const project = projects.find(p => p.id == id);
+
+  if (!project) {
+    return res.status(400).json ({ error: 'Project not found' });
+  }
+
+  return next();
+}
+
+server.use((req, res, next) => {
+
+  console.count("Requisições até o momento");
+
+  return next();
+});
 
 // POST:
 
@@ -34,7 +53,7 @@ server.get('/projects', (req, res) => {
 
 // PUT:
 
-server.put('/projects/:id', (req, res) => {
+server.put('/projects/:id', checkProjectExists, (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
 
@@ -48,10 +67,12 @@ server.put('/projects/:id', (req, res) => {
 
 // DELETE:
 
-server.delete('/projects/:id', (req, res) => {
+server.delete('/projects/:id', checkProjectExists, (req, res) => {
   const { id } = req.params;
 
-  projects.splice(id);
+  const projectIndex = projects.findIndex(p => p.id == id);
+
+  projects.splice(projectIndex, 1);
 
   return res.send();
 });
@@ -59,7 +80,7 @@ server.delete('/projects/:id', (req, res) => {
 
 // POST TASKS:
 
-server.post('/projects/:id/tasks', (req, res) => {
+server.post('/projects/:id/tasks', checkProjectExists, (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
 
