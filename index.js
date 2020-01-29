@@ -6,7 +6,8 @@ server.use(express.json());
 
 const projects = [];
 
-// MIDDLEWARES:
+
+// MIDDLEWARES FUNCTIONS:
 
 function checkProjectExists(req, res, next) {
   const { id } = req.params;
@@ -19,12 +20,14 @@ function checkProjectExists(req, res, next) {
   return next();
 }
 
+
 server.use((req, res, next) => {
 
   console.count("Requisições até o momento");
 
   return next();
 });
+
 
 // POST:
 
@@ -90,5 +93,6 @@ server.post('/projects/:id/tasks', checkProjectExists, (req, res) => {
 
   return res.json(project);
 })
+
 
 server.listen(3000);
