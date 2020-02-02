@@ -23,7 +23,7 @@ function checkProjectExists(req, res, next) {
 
 server.use((req, res, next) => {
 
-  console.count("Requisições até o momento");
+  console.count("Requisitions");
 
   return next();
 });
