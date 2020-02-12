@@ -27,6 +27,8 @@ routes.use((req, res, next) => {
 });
 
 
+// PROJECTS:
+
 // POST:
 
 routes.post('/projects', (req, res) => {
@@ -79,7 +81,9 @@ routes.delete('/projects/:id', checkProjectExists, (req, res) => {
 });
 
 
-// POST TASKS:
+// TASKS:
+
+// POST:
 
 routes.post('/projects/:id/tasks', checkProjectExists, (req, res) => {
   const { id } = req.params;
@@ -90,6 +94,33 @@ routes.post('/projects/:id/tasks', checkProjectExists, (req, res) => {
   project.tasks.push(title);
 
   return res.json(project);
+});
+
+
+// PUT:
+
+routes.put('/projects/:id/tasks/:ptasks', checkProjectExists, (req, res) => {
+  const { id, ptasks } = req.params;
+  const { title } = req.body;
+
+  const project = projects.find(p => p.id == id);
+  
+  project.tasks[ptasks] = title;
+  
+  return res.json(project);
+});
+
+
+// DELETE:
+
+routes.delete('/projects/:id/tasks/:ptasks', checkProjectExists, (req, res) => {
+  const { id, ptasks } = req.params;
+
+  const project = projects.find(p => p.id == id);
+
+  project.tasks.splice(ptasks, 1);
+
+  return res.send();
 })
 
 export default routes;
