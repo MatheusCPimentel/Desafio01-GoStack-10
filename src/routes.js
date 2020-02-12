@@ -1,8 +1,6 @@
-const express = require('express');
+import { Router } from 'express';
 
-const server = express();
-
-server.use(express.json());
+const routes = new Router();
 
 const projects = [];
 
@@ -21,7 +19,7 @@ function checkProjectExists(req, res, next) {
 }
 
 
-server.use((req, res, next) => {
+routes.use((req, res, next) => {
 
   console.count("Requisitions");
 
@@ -31,7 +29,7 @@ server.use((req, res, next) => {
 
 // POST:
 
-server.post('/projects', (req, res) => {
+routes.post('/projects', (req, res) => {
   const { id, title } = req.body;
 
   const project = {
@@ -49,14 +47,14 @@ server.post('/projects', (req, res) => {
 
 // GET:
 
-server.get('/projects', (req, res) => {
+routes.get('/projects', (req, res) => {
   return res.json(projects);
 });
 
 
 // PUT:
 
-server.put('/projects/:id', checkProjectExists, (req, res) => {
+routes.put('/projects/:id', checkProjectExists, (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
 
@@ -70,7 +68,7 @@ server.put('/projects/:id', checkProjectExists, (req, res) => {
 
 // DELETE:
 
-server.delete('/projects/:id', checkProjectExists, (req, res) => {
+routes.delete('/projects/:id', checkProjectExists, (req, res) => {
   const { id } = req.params;
 
   const projectIndex = projects.findIndex(p => p.id == id);
@@ -83,7 +81,7 @@ server.delete('/projects/:id', checkProjectExists, (req, res) => {
 
 // POST TASKS:
 
-server.post('/projects/:id/tasks', checkProjectExists, (req, res) => {
+routes.post('/projects/:id/tasks', checkProjectExists, (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
 
@@ -94,5 +92,4 @@ server.post('/projects/:id/tasks', checkProjectExists, (req, res) => {
   return res.json(project);
 })
 
-
-server.listen(3000);
+export default routes;
